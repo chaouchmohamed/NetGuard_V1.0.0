@@ -1,0 +1,14 @@
+# Virtual Environment
+venv/
+env/
+ENV/
+*.pyc
+__pycache__/
+*.log
+*.db
+*.sqlite3
+*.pkl
+*.joblib
+.DS_Store
+.coverage
+.pytest_cache/

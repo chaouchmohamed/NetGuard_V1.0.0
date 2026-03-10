@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - backend_data:/app/database/data
+      - backend_models:/app/models
+    environment:
+      - PYTHONUNBUFFERED=1
+    networks:
+      - netguard-network
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    depends_on:
+      - backend
+    networks:
+      - netguard-network
+    restart: unless-stopped
+
+networks:
+  netguard-network:
+    driver: bridge
+
+volumes:
+  backend_data:
+  backend_models:

@@ -1,0 +1,109 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    @apply bg-cyber-dark text-gray-200 font-sans overflow-hidden;
+    background-image: 
+      radial-gradient(circle at 1px 1px, rgba(0, 245, 255, 0.1) 1px, transparent 0);
+    background-size: 40px 40px;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-cyber-darker;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-cyber-cyan/20 rounded;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-cyber-cyan/40;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-cyber-card/80 backdrop-blur-sm border border-cyber-cyan/20 rounded-lg;
+    box-shadow: 0 0 20px rgba(0, 245, 255, 0.1);
+  }
+
+  .glow-text {
+    text-shadow: 0 0 10px currentColor;
+  }
+
+  .glow-border {
+    box-shadow: 0 0 10px currentColor;
+  }
+
+  .terminal-text {
+    @apply font-mono text-sm;
+  }
+
+  .severity-critical {
+    @apply bg-cyber-red/20 text-cyber-red border border-cyber-red/30;
+    animation: pulse-glow 2s infinite;
+  }
+
+  .severity-high {
+    @apply bg-orange-500/20 text-orange-500 border border-orange-500/30;
+  }
+
+  .severity-medium {
+    @apply bg-cyber-amber/20 text-cyber-amber border border-cyber-amber/30;
+  }
+
+  .severity-low {
+    @apply bg-cyber-cyan/20 text-cyber-cyan border border-cyber-cyan/30;
+  }
+
+  .scanline {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .scanline::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(0, 245, 255, 0.5), transparent);
+    animation: scanline 8s linear infinite;
+  }
+}
+
+/* Data stream animation */
+@keyframes data-stream {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 0% 100%;
+  }
+}
+
+.data-stream-bg {
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 245, 255, 0.03) 0px,
+    rgba(0, 245, 255, 0.03) 2px,
+    transparent 2px,
+    transparent 8px
+  );
+  animation: data-stream 20s linear infinite;
+}
