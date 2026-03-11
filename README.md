@@ -102,7 +102,7 @@ No root privileges required. No real network access needed. Fully synthetic traf
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/NetGuard_V1.0.0.git
+git clone https://github.com/chaouchmohamed/NetGuard_V1.0.0.git
 cd NetGuard_V1.0.0
 ```
 
