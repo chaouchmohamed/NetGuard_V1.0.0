@@ -14,7 +14,6 @@ function App() {
 
   const [currentTime, setCurrentTime] = useState(new Date());
 
-  // Update clock every second
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date());
@@ -32,9 +31,9 @@ function App() {
             <span className="text-xs ml-2 font-mono text-cyber-cyan/60">v1.0</span>
           </div>
           <div className="flex items-center space-x-2">
-            <div className={`w-3 h-3 rounded-full ${isConnected ? 'bg-cyber-green animate-pulse' : 'bg-cyber-red'}`} />
+            <div className={`w-3 h-3 rounded-full ${isConnected ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`} />
             <span className="text-sm font-mono">
-              {isConnected ? 'SECURE CONNECTION' : 'DISCONNECTED'}
+              {isConnected ? 'CONNECTED' : 'DISCONNECTED'}
             </span>
           </div>
         </div>
@@ -44,8 +43,8 @@ function App() {
             <span className="text-cyber-cyan">{stats?.total_packets || 0}</span>
           </div>
           <div className="text-sm font-mono">
-            <span className="text-cyber-red/60">THREATS: </span>
-            <span className="text-cyber-red">{stats?.total_anomalies || 0}</span>
+            <span className="text-red-500/60">THREATS: </span>
+            <span className="text-red-500">{stats?.total_anomalies || 0}</span>
           </div>
           <div className="text-sm font-mono text-cyber-cyan">
             {currentTime.toLocaleTimeString()}
@@ -53,15 +52,17 @@ function App() {
         </div>
       </header>
 
+      {/* Connection Status Banner */}
+      {!isConnected && (
+        <div className="mx-4 mb-2 p-3 bg-red-500/20 border border-red-500/30 rounded-lg text-center">
+          <p className="text-red-500 font-mono animate-pulse">
+            ⚠️ Disconnected from server. Attempting to reconnect...
+          </p>
+        </div>
+      )}
+
       {/* Main Dashboard */}
       <main className="flex-1 mx-4 mb-4 overflow-hidden">
-        {!isConnected && (
-          <div className="bg-cyber-red/20 border border-cyber-red/30 rounded-lg p-4 mb-4 text-center">
-            <p className="text-cyber-red font-mono">
-              ⚠️ Disconnected from server. Attempting to reconnect...
-            </p>
-          </div>
-        )}
         <Dashboard 
           packets={packets}
           alerts={alerts}

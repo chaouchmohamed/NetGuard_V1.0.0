@@ -1,12 +1,31 @@
 from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks, Query
 from sqlalchemy.orm import Session
 from sqlalchemy import func, desc
+from sqlalchemy import text 
 from typing import List, Dict, Any, Optional
 from datetime import datetime, timedelta
+from models.isolation_forest import AnomalyDetector
+from core.alert_manager import AlertManager  
 import logging
 import os
 import sys
 from pathlib import Path
+
+
+# Global model reference (will be set in main.py)
+model: Optional[AnomalyDetector] = None
+alert_manager: Optional[AlertManager] = None
+
+# THESE FUNCTIONS MUST BE PRESENT
+def set_global_model(model_instance):
+    """Set the global model reference"""
+    global model
+    model = model_instance
+
+def set_global_alert_manager(manager_instance):
+    """Set the global alert manager reference"""
+    global alert_manager
+    alert_manager = manager_instance
 
 # Add parent directory to path
 sys.path.append(str(Path(__file__).parent.parent))
@@ -40,8 +59,8 @@ def set_global_alert_manager(manager_instance):
 async def health_check(db: Session = Depends(get_db)):
     """Health check endpoint"""
     try:
-        # Check database
-        db.execute("SELECT 1").first()
+        # Fix: Use text() for raw SQL
+        db.execute(text("SELECT 1")).first()
         db_status = "healthy"
     except Exception as e:
         db_status = f"unhealthy: {str(e)}"
@@ -89,6 +108,8 @@ async def get_recent_alerts(limit: int = Query(20, ge=1, le=100), db: Session = 
 @router.get("/stats")
 async def get_stats(db: Session = Depends(get_db)):
     """Get overall statistics"""
+    from sqlalchemy import text, func
+    
     # Time ranges
     now = datetime.now()
     last_hour = now - timedelta(hours=1)
@@ -124,13 +145,13 @@ async def get_stats(db: Session = Depends(get_db)):
     top_sources = db.query(
         TrafficLog.src_ip,
         func.count(TrafficLog.id).label('count')
-    ).group_by(TrafficLog.src_ip).order_by(desc('count')).limit(10).all()
+    ).group_by(TrafficLog.src_ip).order_by(text("count DESC")).limit(10).all()
     
     # Top destinations
     top_destinations = db.query(
         TrafficLog.dst_ip,
         func.count(TrafficLog.id).label('count')
-    ).group_by(TrafficLog.dst_ip).order_by(desc('count')).limit(10).all()
+    ).group_by(TrafficLog.dst_ip).order_by(text("count DESC")).limit(10).all()
     
     return {
         "time_range": {

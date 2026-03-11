@@ -96,6 +96,7 @@ const LiveTrafficFeed = ({ packets }) => {
             </button>
           </div>
         </div>
+      
       )}
     </>
   );
