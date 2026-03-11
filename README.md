@@ -32,7 +32,6 @@
 - [Architecture](#-architecture)
 - [Quick Start](#-quick-start)
 - [Testing with Attack Generator](#-testing-with-attack-generator)
-- [Dashboard Preview](#-dashboard-preview)
 - [Detected Attack Types](#-detected-attack-types)
 - [API Documentation](#-api-documentation)
 - [Tech Stack](#-tech-stack)
@@ -41,7 +40,6 @@
 - [How It Works](#-how-it-works)
 - [Performance](#-performance)
 - [Contributing](#-contributing)
-- [License](#-license)
 
 ---
 
@@ -172,36 +170,7 @@ Then choose an attack mode from the interactive menu:
 [7] 🎲  Mixed Traffic (50% attacks)
 ```
 
-Watch the dashboard light up with real-time alerts and anomaly spikes!
 
----
-
-## 🖥️ Dashboard Preview
-
-```
-┌─────────────────────────────────────────────────────────────────────┐
-│  🛡 NETGUARD          ● LIVE · GOOD              2024-01-01 12:34:56 │
-├──────────────┬──────────────┬──────────────┬───────────────────────┤
-│  PACKETS     │  THREATS     │  THREAT LVL  │  CONFIDENCE           │
-│  12,847      │  1,923       │  HIGH        │  87.3%                │
-│  [sparkline] │  [sparkline] │  [sparkline] │  [sparkline]          │
-├──────────────┴──────────────┴──────────────┴───────────────────────┤
-│                  ANOMALY SCORE · REAL-TIME                          │
-│  1.0 ┤                              ▲                               │
-│  0.5 ┤ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─/─\─ ─ ─  ← threshold          │
-│  0.0 ┤___/\_____/\_______________/    \_____                        │
-├──────────────────────────────┬──────────────────────────────────────┤
-│  LIVE TRAFFIC FEED           │  THREAT ALERTS                       │
-│  TIME  SRC IP     DST  STAT  │  🔴 CRITICAL  ddos · 2s ago         │
-│  12:34 192.168.1.5 10.0. OK  │  from 45.x.x.x → 10.0.0.5:80       │
-│  12:34 10.5.2.3   8.8.8 ⚠️  │  [████████████] 94%                 │
-├──────────────────────────────┼──────────────────────────────────────┤
-│  ATTACK DISTRIBUTION         │  NETWORK FLOW MAP                    │
-│    [Donut Chart]             │  SRC IPs ──────→ DST IPs             │
-│    DDoS ████ 47%            │  192.x  ─────────→  10.x             │
-│    Scan ██ 23%              │  45.x   ═════════→  10.x  (threat)   │
-└──────────────────────────────┴──────────────────────────────────────┘
-```
 
 ---
 
@@ -420,39 +389,20 @@ Attack type also elevates severity — e.g. `data_exfiltration` is always at lea
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please follow these steps:
-
-1. Fork the repository
-2. Create a feature branch
-   ```bash
-   git checkout -b feature/AmazingFeature
-   ```
-3. Commit your changes
-   ```bash
-   git commit -m 'Add AmazingFeature'
-   ```
-4. Push and open a Pull Request
-   ```bash
-   git push origin feature/AmazingFeature
-   ```
-
+Contributions are welcome!
 **Guidelines:**
 - Follow PEP 8 for Python code
 - Use ESLint/Prettier for JavaScript
 - Write tests for new features
 - Update this README for significant changes
 
----
 
-## 📄 License
-
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
 
 ---
 
 <div align="center">
 
-Built with ❤️ using FastAPI, scikit-learn, React, and Recharts
+Built with ❤️ , any advice ? 
 
 ⭐ Star this repo if you find it useful!
 
