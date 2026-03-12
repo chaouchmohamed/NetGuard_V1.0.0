@@ -389,7 +389,8 @@ Attack type also elevates severity — e.g. `data_exfiltration` is always at lea
 
 ## 🤝 Contributing
 
-Contributions are welcome!
+### Contributions are welcome!
+
 **Guidelines:**
 - Follow PEP 8 for Python code
 - Use ESLint/Prettier for JavaScript
