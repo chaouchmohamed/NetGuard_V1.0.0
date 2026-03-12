@@ -402,7 +402,7 @@ Contributions are welcome!
 
 <div align="center">
 
-Built with ❤️ , any advice ? 
+### Built with ❤️ to learn, try new things, and meet awesome people
 
 ⭐ Star this repo if you find it useful!
 
