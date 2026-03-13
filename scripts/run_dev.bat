@@ -1,55 +1,72 @@
 @echo off
-REM NetGuard Development Runner for Windows
 echo =========================================
 echo   Starting NetGuard Development Server
 echo =========================================
 
-REM Start Backend
-echo 🚀 Starting Backend server...
+:: ─── Check for admin privileges ───────────────────────────
+net session >nul 2>&1
+if %errorLevel% neq 0 (
+    echo.
+    echo [ERROR] This script requires Administrator privileges.
+    echo Right-click run_dev.bat and select "Run as administrator"
+    echo.
+    pause
+    exit /b 1
+)
+
+:: ─── Backend ───────────────────────────────────────────────
+echo [*] Starting Backend server...
 cd backend
 
-REM Check if virtual environment exists
-if not exist "venv" (
-    echo ❌ Virtual environment not found. Please run setup.bat first
+if not exist "venv\" (
+    echo [ERROR] Virtual environment not found. Please run setup.bat first
+    pause
     exit /b 1
 )
 
-REM Activate virtual environment and start backend
-start /B cmd /c "call venv\Scripts\activate && uvicorn main:app --reload --port 8000 --host 0.0.0.0"
+:: Set interface — change this to match your adapter name
+:: Run 'ipconfig' to find your adapter name (e.g. "Wi-Fi", "Ethernet")
+if "%NETGUARD_INTERFACE%"=="" (
+    set NETGUARD_INTERFACE=Wi-Fi
+    echo [*] Using default interface: Wi-Fi
+    echo     To change: set NETGUARD_INTERFACE=Ethernet ^&^& run_dev.bat
+) else (
+    echo [*] Using interface: %NETGUARD_INTERFACE%
+)
+
+echo [!] Backend requires Administrator rights for raw packet capture
+start "NetGuard Backend" /B venv\Scripts\python.exe main.py
 
 cd ..
-
-REM Wait a moment for backend to initialize
 timeout /t 2 /nobreak >nul
 
-REM Start Frontend
-echo 🚀 Starting Frontend server...
+:: ─── Frontend ──────────────────────────────────────────────
+echo [*] Starting Frontend server...
 cd frontend
 
-REM Check if node_modules exists
-if not exist "node_modules" (
-    echo ❌ Node modules not found. Please run setup.bat first
+if not exist "node_modules\" (
+    echo [ERROR] Node modules not found. Please run setup.bat first
+    pause
     exit /b 1
 )
 
-REM Start frontend
-start /B cmd /c "npm run dev"
+start "NetGuard Frontend" /B npm run dev
 
 cd ..
 
 echo.
-echo ✅ NetGuard is running!
-echo    Frontend: http://localhost:5173
-echo    Backend:  http://localhost:8000
-echo    API Docs: http://localhost:8000/docs
+echo [OK] NetGuard is running!
+echo    Frontend:  http://localhost:5173
+echo    Backend:   http://localhost:8000
+echo    API Docs:  http://localhost:8000/docs
 echo.
-echo Press any key to stop all servers...
+echo    To use a specific interface:
+echo    set NETGUARD_INTERFACE=Ethernet ^&^& run_dev.bat
+echo.
+echo Press Ctrl+C to stop all servers
 echo.
 
-pause >nul
-
-echo 🛑 Shutting down NetGuard...
-taskkill /F /IM python.exe /T >nul 2>&1
-taskkill /F /IM node.exe /T >nul 2>&1
-
-echo ✅ NetGuard stopped.
+:: Keep window open
+:loop
+timeout /t 5 /nobreak >nul
+goto loop

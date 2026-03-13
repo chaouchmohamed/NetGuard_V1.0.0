@@ -1,53 +1,56 @@
 #!/bin/bash
 
-# NetGuard Development Runner
 echo "========================================="
 echo "  Starting NetGuard Development Server"
 echo "========================================="
 
-# Function to kill processes on exit
 cleanup() {
     echo ""
     echo "🛑 Shutting down NetGuard..."
-    kill $BACKEND_PID 2>/dev/null
+    sudo kill $BACKEND_PID 2>/dev/null
     kill $FRONTEND_PID 2>/dev/null
     exit 0
 }
 
-# Set up trap to catch Ctrl+C
 trap cleanup SIGINT SIGTERM
 
-# Start Backend
+# ─── Backend ───────────────────────────────────────────────
 echo "🚀 Starting Backend server..."
 cd backend
 
-# Check if virtual environment exists
 if [ ! -d "venv" ]; then
     echo "❌ Virtual environment not found. Please run setup.sh first"
     exit 1
 fi
 
-# Activate virtual environment and start backend
 source venv/bin/activate
-uvicorn main:app --reload --port 8000 --host 0.0.0.0 &
+
+# Auto-detect network interface if not already set
+if [ -z "$NETGUARD_INTERFACE" ]; then
+    NETGUARD_INTERFACE=$(ip route | grep default | awk '{print $5}' | head -n1)
+    echo "📡 Auto-detected interface: $NETGUARD_INTERFACE"
+else
+    echo "📡 Using interface: $NETGUARD_INTERFACE"
+fi
+
+VENV_PYTHON=$(pwd)/venv/bin/python
+
+echo "⚠️  Backend requires sudo for raw packet capture (scapy)"
+NETGUARD_INTERFACE=$NETGUARD_INTERFACE sudo -E "$VENV_PYTHON" main.py &
 BACKEND_PID=$!
 
 cd ..
-
-# Wait a moment for backend to initialize
 sleep 2
 
-# Start Frontend
+# ─── Frontend ──────────────────────────────────────────────
 echo "🚀 Starting Frontend server..."
 cd frontend
 
-# Check if node_modules exists
 if [ ! -d "node_modules" ]; then
     echo "❌ Node modules not found. Please run setup.sh first"
     exit 1
 fi
 
-# Start frontend
 npm run dev &
 FRONTEND_PID=$!
 
@@ -55,12 +58,14 @@ cd ..
 
 echo ""
 echo "✅ NetGuard is running!"
-echo "   Frontend: http://localhost:5173"
-echo "   Backend:  http://localhost:8000"
-echo "   API Docs: http://localhost:8000/docs"
+echo "   Frontend:  http://localhost:5173"
+echo "   Backend:   http://localhost:8000"
+echo "   API Docs:  http://localhost:8000/docs"
+echo ""
+echo "   To use a specific interface:"
+echo "   NETGUARD_INTERFACE=eth0 ./scripts/run_dev.sh"
 echo ""
 echo "Press Ctrl+C to stop all servers"
 echo ""
 
-# Wait for both processes
 wait $BACKEND_PID $FRONTEND_PID
