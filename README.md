@@ -10,7 +10,7 @@
  ╚═╝  ╚═══╝╚══════╝   ╚═╝    ╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝
 ```
 
-# 🛡️ NetGuard — Network Attack Detection System
+# 🛡️ NetGuard — Network Attack Detection System 🛡️
 
 **Real-time network intrusion detection powered by Machine Learning**
 
