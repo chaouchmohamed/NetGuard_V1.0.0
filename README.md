@@ -47,7 +47,7 @@ Network intrusion detection system built with Isolation Forest. Spins up a live 
 
 ---
 
-## 📖 Overview
+## 📖 Overview 📖
 
 **NetGuard** is a production-ready network attack detection system that uses **Isolation Forest** machine learning to identify anomalous network traffic patterns in real-time. It features a cyberpunk-themed dashboard with live traffic visualization, threat alerts, anomaly scoring charts, and a network flow map — all updating live via WebSocket.
 
